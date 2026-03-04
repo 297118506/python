@@ -27,6 +27,12 @@ DEFAULT_USERS = {
     }
 }
 
+# 全局内存存储（用于Vercel等Serverless环境）
+# 注意：这种方式在实例重启后会丢失数据，仅适用于临时存储
+_memory_storage = {
+    'zylj_content': ''  # 存储zylj.txt的内容
+}
+
 # 用户管理函数
 def load_users():
     """加载用户配置"""
@@ -884,15 +890,22 @@ def process_zylj_file(filepath="zylj.txt", output_filepath="processed_links.md")
     """处理zylj.txt文件，过滤、排序并生成最终的文章内容
     返回：(final_content, has_videos) - 内容和是否包含视频的布尔值"""
     try:
-        # 尝试从环境变量获取链接数据
-        import os
-        zylj_content = os.environ.get('ZYLJ_CONTENT', '')
+        global _memory_storage
+        # 优先从内存存储获取链接数据（Vercel环境）
+        zylj_content = _memory_storage.get('zylj_content', '')
         if zylj_content:
             lines = zylj_content.split('\n')
+            print(f"Loaded {len(lines)} lines from memory storage")
         else:
-            # 尝试从文件读取
-            with open(filepath, 'r', encoding='utf-8') as f:
-                lines = f.readlines()
+            # 尝试从环境变量获取
+            import os
+            zylj_content = os.environ.get('ZYLJ_CONTENT', '')
+            if zylj_content:
+                lines = zylj_content.split('\n')
+            else:
+                # 尝试从文件读取
+                with open(filepath, 'r', encoding='utf-8') as f:
+                    lines = f.readlines()
     except FileNotFoundError:
         return "错误: zylj.txt 文件未找到.", False
 
@@ -950,15 +963,22 @@ def process_zylj_file_double_image(filepath="zylj.txt", output_filepath="process
     """只处理图片链接，纯双排输出
     返回：(final_content, has_videos) - 内容和是否包含视频的布尔值（纯双排模式always False）"""
     try:
-        # 尝试从环境变量获取链接数据
-        import os
-        zylj_content = os.environ.get('ZYLJ_CONTENT', '')
+        global _memory_storage
+        # 优先从内存存储获取链接数据（Vercel环境）
+        zylj_content = _memory_storage.get('zylj_content', '')
         if zylj_content:
             lines = zylj_content.split('\n')
+            print(f"Loaded {len(lines)} lines from memory storage (double)")
         else:
-            # 尝试从文件读取
-            with open(filepath, 'r', encoding='utf-8') as f:
-                lines = f.readlines()
+            # 尝试从环境变量获取
+            import os
+            zylj_content = os.environ.get('ZYLJ_CONTENT', '')
+            if zylj_content:
+                lines = zylj_content.split('\n')
+            else:
+                # 尝试从文件读取
+                with open(filepath, 'r', encoding='utf-8') as f:
+                    lines = f.readlines()
     except FileNotFoundError:
         return "错误: zylj.txt 文件未找到.", False
 
@@ -1292,13 +1312,14 @@ def save_txt():
     clear_first = request.json.get('clear_first', False)
     
     try:
+        global _memory_storage
         if clear_first:
             # 手动保存时先清除原内容
-            with open('zylj.txt', 'w', encoding='utf-8') as f:
-                f.write('')  # 先清空文件
+            _memory_storage['zylj_content'] = ''
         
-        with open('zylj.txt', 'w', encoding='utf-8') as f:
-            f.write(content)
+        # 使用内存存储（Vercel环境无法写入文件）
+        _memory_storage['zylj_content'] = content
+        print(f"Saved to memory storage: {content[:100]}...")
         return jsonify({'success': True})
     except Exception as e:
         return jsonify({'error': str(e)}), 500
@@ -1307,8 +1328,10 @@ def save_txt():
 @api_login_required
 def load_txt():
     try:
-        with open('zylj.txt', 'r', encoding='utf-8') as f:
-            content = f.read()
+        global _memory_storage
+        # 从内存存储读取（Vercel环境无法读取文件）
+        content = _memory_storage.get('zylj_content', '')
+        print(f"Loaded from memory storage: {content[:100]}...")
         return jsonify({'content': content})
     except Exception as e:
         return jsonify({'error': str(e)}), 500
