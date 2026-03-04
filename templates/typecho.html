@@ -1,0 +1,224 @@
+{% extends "base.html" %}
+
+{% block content %}
+<!-- 文章标题区域 -->
+<div class="mb-3 px-3">
+    <div class="d-flex align-items-center">
+        <label class="form-label me-3 mb-0 text-nowrap" style="min-width: 80px;">文章标题:</label>
+        <input type="text" class="form-control" id="article-title" placeholder="输入文章标题...">
+    </div>
+</div>
+
+<div class="typecho-container">
+    <!-- 左侧分类和标签区域 -->
+    <div class="left-sidebar">
+
+        <!-- 分类区域 -->
+        <div class="category-section border-bottom">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <label class="form-label mb-0">分类（点击+右键可添加）</label>
+                <button class="btn btn-sm btn-outline-secondary" id="toggle-categories">全部展开</button>
+            </div>
+            <div class="d-flex mb-2">
+                <input type="text" class="form-control me-2" id="category-search" placeholder="搜索分类...">
+                <div class="btn-group" role="group">
+                    <button type="button" class="btn btn-sm btn-outline-secondary" id="category-prev" onclick="navigateCategorySearch('prev')" title="上一个" disabled>
+                        <i class="fas fa-chevron-up"></i>
+                    </button>
+                    <button type="button" class="btn btn-sm btn-outline-secondary" id="category-next" onclick="navigateCategorySearch('next')" title="下一个" disabled>
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="category-tree" id="category-tree" oncontextmenu="handleCategoryContextMenu(event)">
+                <!-- 分类树将在这里动态生成 -->
+            </div>
+        </div>
+
+        <!-- 标签区域 -->
+        <div class="tag-section">
+            <label class="form-label mb-2">标签（多选）</label>
+            <div class="d-flex mb-2">
+                <input type="text" class="form-control me-2" id="tag-search" placeholder="搜索标签...">
+                <div class="btn-group" role="group">
+                    <button type="button" class="btn btn-sm btn-outline-secondary" id="tag-prev" onclick="navigateTagSearch('prev')" title="上一个" disabled>
+                        <i class="fas fa-chevron-up"></i>
+                    </button>
+                    <button type="button" class="btn btn-sm btn-outline-secondary" id="tag-next" onclick="navigateTagSearch('next')" title="下一个" disabled>
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="tag-list" id="tag-list">
+                <!-- 标签列表将在这里动态生成 -->
+            </div>
+            <label class="form-label mt-2 mb-1">新增标签（用逗号隔开）:</label>
+            <input type="text" class="form-control" id="new-tags" placeholder="输入新标签...">
+        </div>
+    </div>
+
+    <!-- 文章编辑区域 -->
+    <div class="content-area">
+        <div class="editor-container">
+            <label class="form-label">文章内容 (Markdown)</label>
+            <textarea class="form-control editor-textarea" id="article-content" placeholder="输入Markdown内容..."></textarea>
+            
+            <div class="button-group mt-3">
+                <button class="btn btn-process" onclick="processLinks()">一键处理链接</button>
+                <button class="btn btn-process-double" onclick="processLinksDouble()">一键处理链接-纯双排</button>
+                <button class="btn btn-publish" onclick="publishArticle()">发布文章</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 预览区域 -->
+    <div class="preview-area">
+        <label class="form-label">实时预览：</label>
+        <div class="preview-content" id="preview-content">
+            <!-- 预览内容将在这里显示 -->
+        </div>
+    </div>
+
+    <!-- Alist文件管理区域 -->
+    <div class="alist-area">
+        <div class="alist-container">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <select class="form-select" id="alist-account" style="width: 70%;">
+                    <option>选择Alist账户</option>
+                </select>
+                <button class="btn btn-sm btn-outline-primary" onclick="manageAlistAccounts()">管理账户</button>
+            </div>
+            
+            <!-- 标签页容器 -->
+            <div class="alist-tabs-container">
+                <div class="alist-tabs" id="alist-tabs">
+                    <!-- 标签页将在这里动态生成 -->
+                </div>
+                <div class="alist-tabs-nav" id="alist-tabs-nav" style="display: none;">
+                    <button class="alist-tab-nav-btn" id="prev-tab-btn" 
+                            onmousedown="startTabScroll('prev')" 
+                            onmouseup="stopTabScroll()" 
+                            onmouseleave="stopTabScroll()"
+                            ontouchstart="startTabScroll('prev')" 
+                            ontouchend="stopTabScroll()"
+                            title="上一个标签（长按连续切换）">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <button class="alist-tab-nav-btn" id="next-tab-btn" 
+                            onmousedown="startTabScroll('next')" 
+                            onmouseup="stopTabScroll()" 
+                            onmouseleave="stopTabScroll()"
+                            ontouchstart="startTabScroll('next')" 
+                            ontouchend="stopTabScroll()"
+                            title="下一个标签（长按连续切换）">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- 当前标签页内容 -->
+            <div class="alist-tab-content" id="alist-tab-content">
+                <input type="text" class="form-control mb-2" id="file-search" placeholder="搜索文件/文件夹...">
+                
+                <div class="d-flex mb-2">
+                    <button class="btn btn-sm btn-outline-secondary me-1" onclick="searchPrev()">上一个</button>
+                    <button class="btn btn-sm btn-outline-secondary" onclick="searchNext()">下一个</button>
+                </div>
+                
+                <div class="file-list-container">
+                    <div class="file-list" id="file-list">
+                        <!-- 文件列表将在这里显示 -->
+                    </div>
+                    
+                    <!-- 向上滚动按钮 -->
+                    <div class="scroll-control-btn scroll-up-btn" id="scroll-up-btn" 
+                         onmousedown="startFileListScroll('up')" 
+                         onmouseup="stopFileListScroll()" 
+                         onmouseleave="stopFileListScroll()"
+                         ontouchstart="startFileListScroll('up')" 
+                         ontouchend="stopFileListScroll()"
+                         title="向上滚动（长按连续滚动）">
+                        <i class="fas fa-chevron-up"></i>
+                    </div>
+                    
+                    <!-- 向下滚动按钮 -->
+                    <div class="scroll-control-btn scroll-down-btn" id="scroll-down-btn" 
+                         onmousedown="startFileListScroll('down')" 
+                         onmouseup="stopFileListScroll()" 
+                         onmouseleave="stopFileListScroll()"
+                         ontouchstart="startFileListScroll('down')" 
+                         ontouchend="stopFileListScroll()"
+                         title="向下滚动（长按连续滚动）">
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                </div>
+                
+                <div class="d-flex gap-2">
+                    <button class="btn btn-sm btn-secondary" onclick="goUpDirectory()">返回上级</button>
+                    <button class="btn btn-sm btn-primary" onclick="copyAllLinks()">复制全部链接</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 站点配置模态框 -->
+<div class="modal fade" id="siteConfigModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">站点设置</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="site-config-form">
+                    <div class="mb-3">
+                        <label class="form-label">基础站点地址:</label>
+                        <input type="text" class="form-control" id="site-url" placeholder="http://example.com">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">用户名:</label>
+                        <input type="text" class="form-control" id="site-username">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">密码:</label>
+                        <input type="password" class="form-control" id="site-password">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" onclick="saveSiteConfig()">保存</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Alist账户管理模态框 -->
+<div class="modal fade" id="alistAccountModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">管理Alist账户</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="d-flex justify-content-between mb-3">
+                    <h6>账户列表</h6>
+                    <button class="btn btn-sm btn-primary" onclick="addAlistAccount()">添加账户</button>
+                </div>
+                <div id="alist-account-list">
+                    <!-- 账户列表将在这里显示 -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/typecho.js') }}"></script>
+{% endblock %}

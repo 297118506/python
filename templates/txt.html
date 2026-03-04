@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="txt-container">
+    <!-- 顶部设置按钮 -->
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h4>TXT文件可视化管理工具</h4>
+        <button class="btn btn-outline-primary" onclick="showSettings()">设置</button>
+    </div>
+    
+    <!-- 文本编辑区域 -->
+    <textarea class="form-control txt-editor" id="txt-editor" placeholder="在此输入或粘贴内容...">{{ content }}</textarea>
+    
+    <!-- 底部按钮 -->
+    <div class="d-flex gap-2">
+        <button class="btn btn-success" style="height: 50px;" onclick="pasteFromClipboard()">粘贴</button>
+        <button class="btn btn-secondary" onclick="clearContent()">清除</button>
+        <button class="btn btn-primary" onclick="copyContent()">复制</button>
+        <button class="btn btn-warning" onclick="saveContent()">保存</button>
+    </div>
+</div>
+
+<!-- 设置模态框 -->
+<div class="modal fade" id="settingsModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">设置导出文件名</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label class="form-label">请输入要导出的txt文件名：</label>
+                    <input type="text" class="form-control" id="filename-input" value="zylj.txt">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" onclick="saveSettings()">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/txt.js') }}"></script>
+{% endblock %}

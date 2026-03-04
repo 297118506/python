@@ -1,0 +1,169 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2><i class="fas fa-users me-2"></i>用户管理</h2>
+        <button class="btn btn-primary" onclick="showAddUserModal()">
+            <i class="fas fa-user-plus me-1"></i>添加用户
+        </button>
+    </div>
+    
+    <!-- 用户列表 -->
+    <div class="card">
+        <div class="card-header">
+            <h5 class="mb-0"><i class="fas fa-list me-2"></i>用户列表</h5>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead class="table-light">
+                        <tr>
+                            <th><i class="fas fa-user me-1"></i>用户名</th>
+                            <th><i class="fas fa-shield-alt me-1"></i>角色</th>
+                            <th><i class="fas fa-calendar me-1"></i>创建时间</th>
+                            <th><i class="fas fa-cogs me-1"></i>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody id="user-table-body">
+                        <!-- 用户数据将在这里动态加载 -->
+                        <tr>
+                            <td colspan="4" class="text-center text-muted">
+                                <div class="spinner-border spinner-border-sm me-2" role="status"></div>
+                                正在加载用户数据...
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 添加用户模态框 -->
+<div class="modal fade" id="addUserModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <i class="fas fa-user-plus me-2"></i>添加新用户
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="addUserForm">
+                    <div class="mb-3">
+                        <label for="newUsername" class="form-label">
+                            <i class="fas fa-user me-1"></i>用户名
+                        </label>
+                        <input type="text" class="form-control" id="newUsername" placeholder="输入用户名" required>
+                        <div class="form-text">用户名只能包含字母、数字和下划线</div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="newPassword" class="form-label">
+                            <i class="fas fa-lock me-1"></i>密码
+                        </label>
+                        <input type="password" class="form-control" id="newPassword" placeholder="输入密码" required>
+                        <div class="form-text">密码长度至少6位</div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="confirmPassword" class="form-label">
+                            <i class="fas fa-lock me-1"></i>确认密码
+                        </label>
+                        <input type="password" class="form-control" id="confirmPassword" placeholder="再次输入密码" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="newUserRole" class="form-label">
+                            <i class="fas fa-shield-alt me-1"></i>角色
+                        </label>
+                        <select class="form-select" id="newUserRole">
+                            <option value="user">普通用户</option>
+                            <option value="admin">管理员</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" onclick="addUser()">
+                    <i class="fas fa-plus me-1"></i>添加用户
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 修改密码模态框 -->
+<div class="modal fade" id="changePasswordModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <i class="fas fa-key me-2"></i>修改密码
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="changePasswordForm">
+                    <div class="mb-3">
+                        <label class="form-label">
+                            <i class="fas fa-user me-1"></i>用户名
+                        </label>
+                        <input type="text" class="form-control" id="changePasswordUsername" readonly>
+                    </div>
+                    <div class="mb-3">
+                        <label for="newPasswordChange" class="form-label">
+                            <i class="fas fa-lock me-1"></i>新密码
+                        </label>
+                        <input type="password" class="form-control" id="newPasswordChange" placeholder="输入新密码" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="confirmPasswordChange" class="form-label">
+                            <i class="fas fa-lock me-1"></i>确认新密码
+                        </label>
+                        <input type="password" class="form-control" id="confirmPasswordChange" placeholder="再次输入新密码" required>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-warning" onclick="changePassword()">
+                    <i class="fas fa-key me-1"></i>修改密码
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 删除确认模态框 -->
+<div class="modal fade" id="deleteUserModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title text-danger">
+                    <i class="fas fa-exclamation-triangle me-2"></i>确认删除
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="alert alert-warning">
+                    <i class="fas fa-exclamation-triangle me-2"></i>
+                    <strong>警告：</strong>此操作不可恢复！
+                </div>
+                <p>确定要删除用户 <strong id="deleteUsername"></strong> 吗？</p>
+                <p class="text-muted">删除后该用户将无法登录系统。</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-danger" onclick="confirmDeleteUser()">
+                    <i class="fas fa-trash me-1"></i>确认删除
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/user_management.js') }}"></script>
+{% endblock %}

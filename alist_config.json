@@ -1,0 +1,8 @@
+[
+  {
+    "server": "http://192.168.30.150:5244/",
+    "username": "admin",
+    "password": "admin123",
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwicHdkX3RzIjowLCJleHAiOjE3NTU3MDQzNjYsIm5iZiI6MTc1NTUzMTU2NiwiaWF0IjoxNzU1NTMxNTY2fQ.qGvuJ5s-W2MSQPCrRAMeJp0rDC0jczR8ucRbrglW7fo"
+  }
+]

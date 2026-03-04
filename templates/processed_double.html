@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="processed-container">
+    <!-- 左侧编辑区域 -->
+    <div class="processed-editor">
+        <!-- 顶部工具栏 -->
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h5>编辑器 - 双排模式</h5>
+            <div>
+                <button class="btn btn-outline-primary me-2" onclick="saveContent()">保存</button>
+                <button class="btn btn-outline-secondary me-2" onclick="saveAs()">另存为</button>
+                <button class="btn btn-outline-info" id="toggle-preview" onclick="togglePreview()">隐藏预览</button>
+            </div>
+        </div>
+        
+        <!-- 编辑器 -->
+        <textarea class="form-control editor-textarea" id="processed-double-editor" placeholder="在此编辑双排内容...">{{ content }}</textarea>
+    </div>
+    
+    <!-- 右侧预览区域 -->
+    <div class="processed-preview" id="preview-panel">
+        <label class="form-label mb-2">实时预览：</label>
+        <div class="preview-content" id="processed-double-preview">
+            <!-- 预览内容将在这里显示 -->
+        </div>
+    </div>
+</div>
+
+<!-- 另存为模态框 -->
+<div class="modal fade" id="saveAsModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">另存为</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label class="form-label">文件名:</label>
+                    <input type="text" class="form-control" id="save-filename" value="processed_links_double.md">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" onclick="confirmSaveAs()">保存</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/processed_double.js') }}"></script>
+{% endblock %}
+

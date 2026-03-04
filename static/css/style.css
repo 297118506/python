@@ -1,0 +1,592 @@
+/* 全局样式 */
+body {
+    font-family: "Microsoft YaHei", "Segoe UI", sans-serif;
+    background-color: #f8f9fa;
+}
+
+.content-container {
+    padding: 15px;
+    height: calc(100vh - 56px);
+}
+
+/* Typecho页面布局 */
+.typecho-container {
+    display: flex;
+    height: calc(100vh - 120px); /* 调整高度以适应标题栏 */
+    overflow: hidden;
+}
+
+.left-sidebar {
+    width: 17%;
+    background-color: #fff;
+    border-right: 1px solid #dee2e6;
+    display: flex;
+    flex-direction: column;
+    height: 100%; /* 使用父容器的全部高度 */
+    padding: 10px; /* 与其他区域保持一致的padding */
+}
+
+.content-area {
+    width: 23%;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+}
+
+.preview-area {
+    width: 30%;
+    padding: 10px;
+    border-left: 1px solid #dee2e6;
+    border-right: 1px solid #dee2e6;
+    display: flex;
+    flex-direction: column;
+    height: 100%; /* 使用父容器的全部高度 */
+}
+
+.alist-area {
+    width: 30%;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    height: 100%; /* 使用父容器的全部高度 */
+}
+
+/* Alist标签页容器样式 */
+.alist-tabs-container {
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #dee2e6;
+    margin-bottom: 8px;
+    position: relative;
+    min-height: 26px; /* 确保容器有固定高度 */
+    overflow: hidden; /* 防止子元素溢出 */
+}
+
+.alist-tabs {
+    flex: 1;
+    display: flex;
+    overflow-x: auto; /* 自动显示滚动条，但通过CSS隐藏 */
+    scroll-behavior: smooth; /* 平滑滚动 */
+    gap: 2px;
+    white-space: nowrap;
+    /* 隐藏滚动条但保持滚动功能 */
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE/Edge */
+}
+
+/* 隐藏Webkit滚动条 */
+.alist-tabs::-webkit-scrollbar {
+    display: none;
+}
+
+/* 标签页导航按钮容器 */
+.alist-tabs-nav {
+    display: flex;
+    gap: 1px;
+    margin-left: 4px;
+}
+
+/* 标签页导航按钮样式 */
+.alist-tab-nav-btn {
+    width: 20px;
+    height: 24px;
+    background: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-bottom: none;
+    border-radius: 4px 4px 0 0;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    color: #6c757d;
+    transition: all 0.2s ease;
+}
+
+.alist-tab-nav-btn:hover {
+    background: #e9ecef;
+    color: #495057;
+}
+
+.alist-tab-nav-btn:active {
+    background: #dee2e6;
+}
+
+.alist-tab-nav-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* 长按按钮时的视觉反馈 */
+.alist-tab-nav-btn:active,
+.scroll-control-btn:active {
+    transform: scale(0.95);
+    background: #dee2e6;
+    transition: all 0.1s ease;
+}
+
+/* 防止长按时的文本选择 */
+.alist-tab-nav-btn,
+.scroll-control-btn {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -webkit-touch-callout: none;
+}
+
+.alist-tab {
+    padding: 4px 8px;
+    background: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-bottom: none;
+    border-radius: 4px 4px 0 0;
+    cursor: pointer;
+    font-size: 0.75rem;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    min-width: 50px; /* 最小宽度 */
+    max-width: 100px; /* 稍微增大最大宽度 */
+    gap: 3px;
+    flex-shrink: 0; /* 防止标签被压缩 */
+    height: 24px; /* 固定高度与导航按钮一致 */
+    box-sizing: border-box;
+}
+
+.alist-tab:hover {
+    background: #e9ecef;
+}
+
+.alist-tab.active {
+    background: white;
+    border-bottom: 1px solid white;
+    margin-bottom: -1px;
+    z-index: 1;
+    position: relative;
+}
+
+.alist-tab-name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-right: 3px; /* 增大四分之一：从2px到3px */
+    max-width: 45px; /* 增大四分之一：从36px到45px */
+    font-size: inherit; /* 继承父元素的字体大小 */
+}
+
+.alist-tab-close {
+    width: 12px; /* 增大四分之一：从10px到12px */
+    height: 12px; /* 增大四分之一：从10px到12px */
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 10px; /* 增大四分之一：从8px到10px */
+    line-height: 1;
+    padding: 0;
+    color: #6c757d;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 12px; /* 增大四分之一：从10px到12px */
+    flex-shrink: 0; /* 防止按钮被压缩 */
+}
+
+.alist-tab-close:hover {
+    background: #dc3545;
+    color: white;
+}
+
+.alist-tab-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden; /* 防止整个内容区域滚动 */
+    gap: 6px; /* 减少子元素之间的间距以优化空间利用 */
+    padding-bottom: 0; /* 确保底部没有额外padding */
+}
+
+/* 确保Alist区域底部按钮组没有额外margin */
+.alist-tab-content > .d-flex:last-child {
+    margin-bottom: 0 !important;
+}
+
+/* 确保左侧区域底部输入框没有额外margin */
+.tag-section > .form-control:last-child {
+    margin-bottom: 0 !important;
+}
+
+/* 搜索导航按钮 */
+.btn-group .btn-sm {
+    padding: 0.25rem 0.4rem;
+    font-size: 0.75rem;
+    min-width: 28px;
+}
+
+.btn-group .btn-sm i {
+    font-size: 0.7rem;
+}
+
+.btn-group .btn-sm:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+/* 分类和标签区域 */
+.category-section {
+    flex: 1;
+    margin-bottom: 8px; /* 缩小分类区域底部间距 */
+    display: flex;
+    flex-direction: column;
+    min-height: 0; /* 允许flex项目缩小 */
+}
+
+.tag-section {
+    flex: 1;
+    margin-bottom: 10px; /* 缩小标签区域底部间距 */
+    display: flex;
+    flex-direction: column;
+    min-height: 0; /* 允许flex项目缩小 */
+}
+
+.category-tree {
+    flex: 1;
+    overflow-y: auto;
+    border: 1px solid #dee2e6;
+    padding: 5px;
+    font-size: 0.75rem; /* 字体缩小三分之一 (原来1rem) */
+    min-height: 0; /* 允许flex项目缩小 */
+}
+
+/* 分类项样式 */
+.category-item {
+    line-height: 1.3; /* 紧凑的行高 */
+}
+
+.category-name {
+    cursor: pointer;
+    padding: 1px 3px; /* 缩小内边距 */
+    border-radius: 2px;
+    font-size: 0.75rem; /* 分类名称字体缩小 */
+}
+
+.expand-btn {
+    font-size: 0.6rem; /* 展开按钮缩小三分之一 */
+    cursor: pointer;
+    user-select: none;
+    width: 12px; /* 设置固定宽度 */
+    text-align: center;
+}
+
+.tag-list {
+    flex: 1;
+    overflow-y: auto;
+    border: 1px solid #dee2e6;
+    padding: 5px;
+    display: flex;
+    flex-wrap: wrap;
+    min-height: 0; /* 允许flex项目缩小 */
+    align-content: flex-start; /* 内容从顶部开始排列 */
+}
+
+.tag-item {
+    margin: 2px;
+    padding: 2px 5px;
+    background-color: #e9ecef;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 0.9rem;
+}
+
+.tag-item.selected {
+    background-color: #007bff;
+    color: white;
+}
+
+/* 编辑器区域 */
+.editor-container {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.editor-textarea {
+    flex-grow: 1;
+    resize: none;
+    border: 1px solid #dee2e6;
+    padding: 10px;
+}
+
+.button-group {
+    margin-top: 10px;
+    display: flex;
+    justify-content: space-between;
+}
+
+/* 按钮样式 */
+.btn-process {
+    background-color: #1abc9c;
+    color: white;
+}
+
+.btn-process-double {
+    background-color: #3498db;
+    color: white;
+}
+
+.btn-publish {
+    background-color: #6bfff5;
+    color: black;
+    height: 50px;
+}
+
+/* Alist文件管理区域 */
+.alist-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.file-list-container {
+    position: relative;
+    flex: 1;
+    min-height: 0; /* 允许flex子项缩小 */
+}
+
+.file-list {
+    height: 100%; /* 使用父容器的全部高度 */
+    border: 1px solid #dee2e6;
+    overflow-y: auto; /* 确保垂直滚动 */
+    overflow-x: hidden; /* 隐藏水平滚动 */
+    border-radius: 0 !important;
+    margin: 0;
+    /* 确保滚动条可见 */
+    scrollbar-width: thin; /* Firefox */
+    -webkit-overflow-scrolling: touch; /* iOS smooth scrolling */
+}
+
+/* 滚动控制按钮样式 */
+.scroll-control-btn {
+    position: absolute;
+    right: 1px; /* 稍微向左偏移，不完全覆盖滚动条 */
+    width: 10px; /* 稍微增大一点便于点击 */
+    height: 10px; /* 与宽度一致 */
+    background-color: rgba(108, 117, 125, 0.8); /* 半透明背景 */
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 100; /* 提高层级确保在滚动条之上 */
+    font-size: 6px; /* 增大图标以适应10px按钮 */
+    opacity: 0.6;
+    transition: opacity 0.2s ease, background-color 0.2s ease;
+    border-radius: 2px; /* 稍微圆角 */
+    border: 1px solid rgba(255,255,255,0.3); /* 淡白色边框 */
+}
+
+.scroll-control-btn:hover {
+    opacity: 1;
+    background-color: #495057;
+}
+
+.scroll-control-btn:active {
+    background-color: #343a40;
+}
+
+.scroll-up-btn {
+    top: 2px; /* 稍微向下偏移，避免覆盖边框 */
+}
+
+.scroll-down-btn {
+    bottom: 2px; /* 稍微向上偏移，避免覆盖边框 */
+}
+
+/* 当文件列表很短时隐藏滚动按钮 */
+.scroll-control-btn.hidden {
+    display: none;
+}
+
+.file-item {
+    padding: 5px;
+    cursor: pointer;
+    border-bottom: 1px solid #f0f0f0;
+    font-size: 0.75rem; /* 字体缩小四分之一 (原来1rem) */
+    line-height: 1.3; /* 紧凑的行高 */
+}
+
+.file-item:hover {
+    background-color: #f8f9fa;
+}
+
+/* 右键选中高亮状态 */
+.file-item.right-click-selected {
+    background-color: #007bff !important;
+    color: white !important;
+}
+
+.file-item.right-click-selected .folder-item {
+    color: white !important;
+}
+
+.folder-item {
+    color: #007bff;
+    font-weight: bold;
+    font-size: 0.75rem; /* 文件夹字体也缩小 */
+}
+
+/* TXT管理页面 */
+.txt-container {
+    height: calc(100vh - 86px);
+    display: flex;
+    flex-direction: column;
+}
+
+.txt-editor {
+    flex-grow: 1;
+    resize: none;
+    margin-bottom: 10px;
+}
+
+/* Processed页面 */
+.processed-container {
+    display: flex;
+    height: calc(100vh - 86px);
+}
+
+.processed-editor {
+    width: 50%;
+    height: 100%;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+}
+
+.processed-preview {
+    width: 50%;
+    height: 100%;
+    padding: 10px;
+    border-left: 1px solid #dee2e6;
+    display: flex;
+    flex-direction: column;
+}
+
+.editor-textarea {
+    flex-grow: 1;
+    resize: none;
+}
+
+/* 响应式布局 */
+@media (max-width: 992px) {
+    .typecho-container {
+        flex-direction: column;
+        height: auto;
+    }
+
+    .left-sidebar, .content-area, .preview-area, .alist-area {
+        width: 100%;
+        height: auto;
+        margin-bottom: 15px;
+    }
+
+    .processed-container {
+        flex-direction: column;
+        height: auto;
+    }
+
+    .processed-editor, .processed-preview {
+        width: 100%;
+        height: 500px;
+    }
+}
+
+/* 预览区域样式 */
+.preview-content {
+    flex: 1;
+    padding: 10px;
+    background-color: white;
+    border: 1px solid #dee2e6;
+    overflow-y: auto;
+    min-height: 0; /* 允许flex项目缩小到内容以下 */
+}
+
+.preview-content img {
+    max-width: 100%;
+    height: auto;
+}
+
+/* 右键菜单样式 */
+.context-menu {
+    font-size: 0.75rem; /* 菜单字体缩小三分之一 */
+}
+
+.context-menu-item {
+    padding: 4px 8px !important; /* 菜单项内边距缩小三分之一 */
+    font-size: 0.75rem !important; /* 菜单项字体缩小三分之一 */
+    line-height: 1.2;
+}
+
+/* 自定义滚动条 */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+/* 站点信息链接样式 */
+#site-info a {
+    transition: all 0.2s ease;
+    border-radius: 3px;
+    padding: 2px 6px;
+    margin: 0 2px;
+    display: inline-block;
+}
+
+#site-info a:hover {
+    background-color: rgba(13, 110, 253, 0.1);
+    text-decoration: underline !important;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+#site-info a:active {
+    transform: translateY(0);
+    box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+}
+
+/* 视频响应式样式 */
+video {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* 预览区域视频特别处理 */
+#preview-content video {
+    width: 100% !important;
+    height: auto !important;
+    max-width: 100% !important;
+    border-radius: 4px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    margin: 5px 0;
+}
+
+/* 表格中的视频样式 */
+table video {
+    width: 100% !important;
+    height: auto !important;
+    max-width: 100% !important;
+    border-radius: 4px;
+}
