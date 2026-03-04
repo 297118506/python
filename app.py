@@ -1243,7 +1243,7 @@ def get_alist_files():
     account = data['account']
     path = data['path']
     
-    api = AlistApi(account['server'], account['username'], account['password'], account.get('token'))
+    api = AlistApi(account['server_url'], account['username'], account['password'], account.get('token'))
     try:
         if not api.token:
             api.login()
