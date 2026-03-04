@@ -920,13 +920,24 @@ def process_zylj_file(filepath="zylj.txt", output_filepath="processed_links.md")
         try:
             path = unquote(urlparse(url).path)
             ext = os.path.splitext(path)[1].lower()
-        except Exception:
+            print(f"Processing URL: {url}")
+            print(f"Extracted path: {path}")
+            print(f"Extracted extension: {ext}")
+        except Exception as e:
+            print(f"Error processing URL {url}: {e}")
             continue
 
         if ext in VIDEO_EXTENSIONS:
             video_links.append(url)
+            print(f"Added to video_links: {url}")
         elif ext in IMAGE_EXTENSIONS:
             image_links.append(url)
+            print(f"Added to image_links: {url}")
+        else:
+            print(f"Extension {ext} not in any extension list")
+
+    print(f"Total video links: {len(video_links)}")
+    print(f"Total image links: {len(image_links)}")
 
     video_links.sort(key=extract_sort_key)
     image_links.sort(key=extract_sort_key)
@@ -955,6 +966,10 @@ def process_zylj_file(filepath="zylj.txt", output_filepath="processed_links.md")
     
     # 在Serverless环境中，保存操作可以忽略
     print(f"Processed links content: {final_content[:50]}...")
+    print(f"Final content length: {len(final_content)}")
+    print(f"Stats info: '{stats_info}'")
+    print(f"Video content length: {len(video_content)}")
+    print(f"Image content length: {len(image_content)}")
     # 注意：在Vercel环境中，我们无法写入文件
 
     return final_content, has_videos 
