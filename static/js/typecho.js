@@ -1326,7 +1326,7 @@ async function loadAlistAccounts() {
         accounts.forEach((account, index) => {
             const option = document.createElement('option');
             option.value = index;
-            option.textContent = `${account.server} (${account.username})`;
+            option.textContent = `${account.server_url} (${account.username})`;
             select.appendChild(option);
         });
         
@@ -2497,7 +2497,7 @@ function renderAlistAccountList(accounts) {
             <div class="card-body">
                 <div class="d-flex justify-content-between align-items-center">
                     <div>
-                        <h6 class="mb-1">${account.server}</h6>
+                        <h6 class="mb-1">${account.server_url}</h6>
                         <small class="text-muted">用户名: ${account.username}</small>
                     </div>
                     <div>
