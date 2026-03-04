@@ -889,6 +889,7 @@ def format_images_double(image_links):
 def process_zylj_file(filepath="zylj.txt", output_filepath="processed_links.md"):
     """处理zylj.txt文件，过滤、排序并生成最终的文章内容
     返回：(final_content, has_videos) - 内容和是否包含视频的布尔值"""
+    import os
     try:
         global _memory_storage
         # 优先从内存存储获取链接数据（Vercel环境）
@@ -898,7 +899,6 @@ def process_zylj_file(filepath="zylj.txt", output_filepath="processed_links.md")
             print(f"Loaded {len(lines)} lines from memory storage")
         else:
             # 尝试从环境变量获取
-            import os
             zylj_content = os.environ.get('ZYLJ_CONTENT', '')
             if zylj_content:
                 lines = zylj_content.split('\n')
@@ -916,6 +916,11 @@ def process_zylj_file(filepath="zylj.txt", output_filepath="processed_links.md")
         url = line.strip()
         if not url:
             continue
+            
+        # 移除URL末尾的冒号
+        if url.endswith(':'):
+            url = url[:-1]
+            print(f"Removed trailing colon from URL: {url}")
             
         try:
             path = unquote(urlparse(url).path)
@@ -977,6 +982,7 @@ def process_zylj_file(filepath="zylj.txt", output_filepath="processed_links.md")
 def process_zylj_file_double_image(filepath="zylj.txt", output_filepath="processed_links_double.md"):
     """只处理图片链接，纯双排输出
     返回：(final_content, has_videos) - 内容和是否包含视频的布尔值（纯双排模式always False）"""
+    import os
     try:
         global _memory_storage
         # 优先从内存存储获取链接数据（Vercel环境）
@@ -986,7 +992,6 @@ def process_zylj_file_double_image(filepath="zylj.txt", output_filepath="process
             print(f"Loaded {len(lines)} lines from memory storage (double)")
         else:
             # 尝试从环境变量获取
-            import os
             zylj_content = os.environ.get('ZYLJ_CONTENT', '')
             if zylj_content:
                 lines = zylj_content.split('\n')
@@ -1002,6 +1007,12 @@ def process_zylj_file_double_image(filepath="zylj.txt", output_filepath="process
         url = line.strip()
         if not url:
             continue
+        
+        # 移除URL末尾的冒号
+        if url.endswith(':'):
+            url = url[:-1]
+            print(f"Removed trailing colon from URL (double): {url}")
+            
         try:
             path = unquote(urlparse(url).path)
             ext = os.path.splitext(path)[1].lower()
